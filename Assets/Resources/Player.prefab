@@ -147,6 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5848843318850528148}
   - component: {fileID: 7036812488596347581}
+  - component: {fileID: 1961298399811530536}
   - component: {fileID: 8525624509024635660}
   - component: {fileID: 2558653302601522144}
   - component: {fileID: 3065966997429248395}
@@ -190,6 +191,20 @@ MonoBehaviour:
   moveSpeed: 5
   jumpPower: 3
   cam: {fileID: 579320829346826087}
+--- !u!114 &1961298399811530536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191334359631174606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df323a614da42d949bf1a75378a9e457, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeFactory: {fileID: 3575979856241181112, guid: 41df051cc7163874888530e48ca074b4,
+    type: 3}
 --- !u!114 &8525624509024635660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,9 +264,8 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 3519860155986843220}
+  observableSearch: 0
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -270,7 +284,7 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_UseLocal: 0
 --- !u!1 &4398949751539651662
 GameObject:
   m_ObjectHideFlags: 0
