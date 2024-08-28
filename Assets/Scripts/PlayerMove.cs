@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : MonoBehaviourPun
 {
     // 캐릭터 컨트롤러
     CharacterController cc;
@@ -16,8 +17,8 @@ public class PlayerMove : MonoBehaviour
     float yVelocity;
     // 점프 초기 속력
     public float jumpPower = 3;
-    
 
+       
     void Start()
     {
         // 캐릭터 컨트롤러 가져오자.
