@@ -30,6 +30,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void Start()
     {
+        if(photonView.IsMine)
+        {
+            // 마우스 잠그자.
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         // 캐릭터 컨트롤러 가져오자.
         cc = GetComponent<CharacterController>();
         // 내 것일 때만 카메라를 활성화자
