@@ -103,7 +103,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -122,6 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
+  exploFactory: {fileID: 8764043878647920493, guid: c4ed38c72957f2241ad144a1614956d9,
+    type: 3}
 --- !u!114 &-4779333879324742648
 MonoBehaviour:
   m_ObjectHideFlags: 0

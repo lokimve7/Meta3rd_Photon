@@ -209,7 +209,7 @@ MonoBehaviour:
     type: 3}
   impactFactory: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7,
     type: 3}
-  bulletFactory: {fileID: 6137823909325658825, guid: 756b16e3c3be01a45a8d9eeaaf372959,
+  rpcBulletFactory: {fileID: 6075277891738079315, guid: 7d803e5c60677db4abfa6a41dce5dd9c,
     type: 3}
   firePos: {fileID: 816938518169045626}
 --- !u!114 &8525624509024635660
