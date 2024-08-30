@@ -15,10 +15,12 @@ public class PlayerFire : MonoBehaviourPun
     public GameObject rpcBulletFactory;
     // 총구 Transform
     public Transform firePos;
+    // Animator
+    Animator anim;
 
     void Start()
     {
-        
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -29,8 +31,10 @@ public class PlayerFire : MonoBehaviourPun
         // 마우스 왼쪽 버튼 누르면
         if(Input.GetMouseButtonDown(0))
         {
+            // 총쏘는 애니메이션 실행 (Fire 트리거 발생)
+            photonView.RPC(nameof(SetTrigger), RpcTarget.All, "Fire");
             // 총알공장에서 총알을 생성, 총구위치 셋팅, 총구회전 셋팅
-            PhotonNetwork.Instantiate("Bullet", firePos.position, Camera.main.transform.rotation);            
+            PhotonNetwork.Instantiate("Bullet", firePos.position, Camera.main.transform.rotation);
         }
         // 마우스 가운데 휠 버튼 눌렀을때
         if(Input.GetMouseButtonDown(2))
@@ -63,6 +67,12 @@ public class PlayerFire : MonoBehaviourPun
             //PhotonNetwork.Instantiate("Cube", pos, Quaternion.identity);
             photonView.RPC(nameof(CreateCube), RpcTarget.All, pos);
         }       
+    }
+
+    [PunRPC]
+    void SetTrigger(string parameter)
+    {
+        anim.SetTrigger(parameter);
     }
 
     [PunRPC]
