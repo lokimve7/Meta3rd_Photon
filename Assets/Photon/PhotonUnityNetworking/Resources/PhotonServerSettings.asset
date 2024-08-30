@@ -35,14 +35,14 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - ClickRpc
+  - CreateBullet
+  - CreateCube
+  - CreateImpact
+  - CreatExplo
   - DestroyRpc
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
-  - CreateImpact
-  - CreateCube
-  - CreateBullet
-  - CreatExplo
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
