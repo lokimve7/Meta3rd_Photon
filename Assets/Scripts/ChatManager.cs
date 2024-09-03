@@ -8,6 +8,12 @@ public class ChatManager : MonoBehaviour
     // Input Field
     public TMP_InputField inputChat;
 
+    // ChatItem Prefab
+    public GameObject chatItemFactory;
+
+    // Content 의 Transfom
+    public Transform trContent;
+
     void Start()
     {
         // inputChat 의 내용이 변경될 때 호출되는 함수 등록
@@ -20,21 +26,28 @@ public class ChatManager : MonoBehaviour
 
     void Update()
     {
-        
-    }
 
-    void OnValueChanged(string s)
-    {
-        print("변경 중 : " + s);
+
     }
 
     void OnSubmit(string s)
     {
-        print("엔터 침 : " + s);
+        // ChatItem 하나 만들자 (부모를 ChatView 의 Content 로 하자)
+        GameObject go = Instantiate(chatItemFactory, trContent);
+        // ChatItem 컴포넌트 가져오자.
+        ChatItem chatItem = go.GetComponent<ChatItem>();
+        // 가져온 컴포넌트의 SetText 함수 실행
+        chatItem.SetText(s);
+        // inputChat 에 있는 내용을 초기화
+        inputChat.text = "";
     }
+    void OnValueChanged(string s)
+    {
+        //print("변경 중 : " + s);
+    }    
 
     void OnEndEdit(string s)
     {
-        print("작성 끝 : " + s);
+        //print("작성 끝 : " + s);
     }
 }

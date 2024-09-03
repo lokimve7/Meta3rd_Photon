@@ -25,6 +25,7 @@ public class HPSystem : MonoBehaviour
 
 
     // HP 갱신 함수
+
     public void UpdateHP(float value)
     {
         // 현재 HP 를 value 만큼 더하자.
