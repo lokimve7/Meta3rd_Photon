@@ -1,6 +1,4 @@
 ﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviourPun
@@ -19,7 +17,7 @@ public class Bullet : MonoBehaviourPun
         if(photonView.IsMine)
         {
             rb = GetComponent<Rigidbody>();
-            rb.velocity = transform.forward * moveSpeed;
+            rb.velocity = transform.up * moveSpeed;
         }
     }
 
