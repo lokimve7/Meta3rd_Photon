@@ -29,6 +29,10 @@ public class ObjRotate : MonoBehaviour
         // 만약에 내것이라면 
         if(pv.IsMine)
         {
+            // 마우스의 lockMode 가 None 이면 (마우스 포인터가 활성화 되어 있다면) 함수를 나가자.
+            if (Cursor.lockState == CursorLockMode.None)
+                return;
+
             // 1. 마우스의 움직임을 받아오자.
             float mx = Input.GetAxis("Mouse X");
             float my = Input.GetAxis("Mouse Y");

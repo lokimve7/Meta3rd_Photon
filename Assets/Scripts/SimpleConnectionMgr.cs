@@ -30,7 +30,7 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
     public void JoinLobby()
     {
         // 닉네임 설정
-        PhotonNetwork.NickName = "김현진";
+        PhotonNetwork.NickName = "김현진" + Random.Range(1, 1000);
         // 기본 Lobby 입장
         PhotonNetwork.JoinLobby();
     }
@@ -57,7 +57,7 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
         roomOption.IsOpen = true;
 
         // Room 참여 or 생성
-        PhotonNetwork.JoinOrCreateRoom("meta_unity_room0412310", roomOption, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("meta_unity_room040", roomOption, TypedLobby.Default);
     }
 
     // 방 생성 성공 했을 때 호출되는 함수

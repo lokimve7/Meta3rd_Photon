@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
@@ -39,12 +40,15 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     // LookPos
     public Transform lookPos;
 
+    // 닉네임 UI
+    public TMP_Text nickName;
+
     void Start()
     {
         if(photonView.IsMine)
         {
             // 마우스 잠그자.
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         // 캐릭터 컨트롤러 가져오자.
@@ -53,6 +57,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         cam.SetActive(photonView.IsMine);
         // Animator 가져오자
         anim = GetComponentInChildren<Animator>();
+
+        // 닉네임 UI 에 해당캐릭터의 주인의 닉네임 설정
+        nickName.text = photonView.Owner.NickName;
     }
 
     void Update()
@@ -60,6 +67,10 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         // 내 것일 때만 컨트롤 하자!
         if(photonView.IsMine)
         {
+            // 마우스의 lockMode 가 None 이면 (마우스 포인터가 활성화 되어 있다면) 함수를 나가자.
+            if (Cursor.lockState == CursorLockMode.None)
+                return;            
+
             // 1 .키보드 WASD 키 입력을 받자
             h = Input.GetAxis("Horizontal");
             v = Input.GetAxis("Vertical");

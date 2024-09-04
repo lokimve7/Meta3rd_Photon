@@ -28,8 +28,12 @@ public class PlayerFire : MonoBehaviourPun
         // 만약에 내 것이 아니라면
         if (photonView.IsMine == false) return;
 
+        // 마우스의 lockMode 가 None 이면 (마우스 포인터가 활성화 되어 있다면) 함수를 나가자.
+        if (Cursor.lockState == CursorLockMode.None)
+            return;
+
         // 마우스 왼쪽 버튼 누르면
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             // 총쏘는 애니메이션 실행 (Fire 트리거 발생)
             photonView.RPC(nameof(SetTrigger), RpcTarget.All, "Fire");

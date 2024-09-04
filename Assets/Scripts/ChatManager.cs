@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
+using UnityEngine.EventSystems;
 
 public class ChatManager : MonoBehaviourPun
 {
@@ -39,7 +40,27 @@ public class ChatManager : MonoBehaviourPun
 
     void Update()
     {
-
+        // 만약에 왼쪽 컨트롤키를 누르면
+        if(Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            // 마우스 포인터를 활성화
+            Cursor.lockState = CursorLockMode.None;
+        }
+                
+        // 만약에 마우스 왼쪽버튼을 눌렀으면
+        if(Input.GetMouseButtonDown(0))
+        {
+            // 마우스 포인터가 활성화 되어있다면
+            if(Cursor.lockState == CursorLockMode.None)
+            {
+                // 만약에 UI 가 클릭이 되지 않았다면
+                if(EventSystem.current.IsPointerOverGameObject() == false)
+                {
+                    // 마우스 포인터를 비활성화
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
+            }
+        }
 
     }
 
