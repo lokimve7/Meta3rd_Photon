@@ -12,7 +12,6 @@ public class HPSystem : MonoBehaviour
     // HPBar Image
     public Image hpBar;
 
-
     void Start()
     {
         // 현재 HP 를 최대 HP 로 설정
