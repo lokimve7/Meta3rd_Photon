@@ -26,18 +26,24 @@ public class PlayerFire : MonoBehaviourPun
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
+
+        // HPSystem 가져오자.
+        HPSystem hpSystem = GetComponentInChildren<HPSystem>();
+        // onDie 변수에 OnDie 함수 설정
+        hpSystem.onDie = OnDie;
     }
 
     void Update()
     {
-        
-
         // 만약에 내 것이 아니라면
         if (photonView.IsMine == false) return;
 
         // 마우스의 lockMode 가 None 이면 (마우스 포인터가 활성화 되어 있다면) 함수를 나가자.
         if (Cursor.lockState == CursorLockMode.None)
             return;
+
+        // HP 0 이 되었으면 총 쏘지 못하게
+        if (isDie) return;
 
         // 마우스 왼쪽 버튼 누르면
         if (Input.GetMouseButtonDown(0))
@@ -68,10 +74,10 @@ public class PlayerFire : MonoBehaviourPun
                 photonView.RPC(nameof(CreateImpact), RpcTarget.All, hit.point);
 
                 // 부딪힌 놈의 데미지를 주자.
-                PlayerFire pf = hit.transform.GetComponent<PlayerFire>();
-                if(pf != null)
+                HPSystem hpSystem = hit.transform.GetComponentInChildren<HPSystem>();
+                if(hpSystem != null)
                 {
-                    pf.photonView.RPC(nameof(OnDamaged), RpcTarget.All);
+                    hpSystem.UpdateHP(-1);
                 }
             }   
         }
@@ -81,9 +87,9 @@ public class PlayerFire : MonoBehaviourPun
         {
             // 카메라의 앞방향으로 5만큼 떨어진 위치를 구하자.
             Vector3 pos = Camera.main.transform.position + Camera.main.transform.forward * 5;
-            //// 큐브공장에서 큐브를 생성, 위치, 회전
-            //PhotonNetwork.Instantiate("Cube", pos, Quaternion.identity);
-            photonView.RPC(nameof(CreateCube), RpcTarget.All, pos);
+            // 큐브공장에서 큐브를 생성, 위치, 회전
+            PhotonNetwork.Instantiate("Cube", pos, Quaternion.identity);
+            //photonView.RPC(nameof(CreateCube), RpcTarget.All, pos);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -136,16 +142,17 @@ public class PlayerFire : MonoBehaviourPun
         impact.transform.position = position;
     }
 
-    [PunRPC]
-    void OnDamaged()
-    {
-        HPSystem hpSystemp = GetComponentInChildren<HPSystem>();
-        hpSystemp.UpdateHP(-1);
-    }
 
     [PunRPC]
     void CreateCube(Vector3 position)
     {
         Instantiate(cubeFactory, position, Quaternion.identity);
+    }
+
+    // 죽었니?
+    bool isDie;
+    public void OnDie()
+    {
+        isDie = true;
     }
 }

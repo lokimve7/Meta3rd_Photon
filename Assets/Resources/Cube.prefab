@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 8744589378700619228}
   - component: {fileID: 8118076268444946297}
   - component: {fileID: 1627491036975047242}
-  m_Layer: 0
+  - component: {fileID: 2093634421488442837}
+  - component: {fileID: -4074221413895312466}
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +126,34 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2093634421488442837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575979856241181112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9095e0fc0e9a3d34eaa983c61ecbab2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 2
+  hpBar: {fileID: 0}
+--- !u!114 &-4074221413895312466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575979856241181112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f38f673cbc1d1ea4197f9b13109ac60f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
