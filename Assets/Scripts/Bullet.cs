@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviourPun
     void Start()
     {
         // 내것일때만 
-        if(photonView.IsMine)
+        //if(photonView.IsMine)
         {
             rb = GetComponent<Rigidbody>();
             rb.velocity = transform.up * moveSpeed;

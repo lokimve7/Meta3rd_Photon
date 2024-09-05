@@ -11,12 +11,17 @@ public class PlayerFire : MonoBehaviourPun
     // Impact Prefab
     public GameObject impactFactory;
 
+    // RigidBody 로 움직이는 총알 Prefab
+    public GameObject bulletFactory;
     // 총알 Prefab
     public GameObject rpcBulletFactory;
     // 총구 Transform
     public Transform firePos;
     // Animator
     Animator anim;
+
+    // 스킬 중심점
+    public Transform skillCenter;
 
     void Start()
     {
@@ -25,6 +30,8 @@ public class PlayerFire : MonoBehaviourPun
 
     void Update()
     {
+        
+
         // 만약에 내 것이 아니라면
         if (photonView.IsMine == false) return;
 
@@ -77,7 +84,37 @@ public class PlayerFire : MonoBehaviourPun
             //// 큐브공장에서 큐브를 생성, 위치, 회전
             //PhotonNetwork.Instantiate("Cube", pos, Quaternion.identity);
             photonView.RPC(nameof(CreateCube), RpcTarget.All, pos);
-        }       
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            int maxBulletCnt = 10;
+            float angle = 360.0f / maxBulletCnt;
+
+            for (int i = 0; i < maxBulletCnt; i++)
+            {
+                #region 싱글플레이 모드
+                //// 총알 생성
+                //GameObject bullet = Instantiate(bulletFactory);
+                //// skillCenter 를 (angle * i) 만큼 회전
+                //skillCenter.localEulerAngles = new Vector3(0, angle * i, 0);
+
+                //// 생성된 총알을 skillCenter 의 앞방으로 2 만큼 떨어진 위치에 놓자.
+                //bullet.transform.position = skillCenter.position + skillCenter.forward * 2;
+
+                //// 생성된 총알의 up 방향을 skillcenter 의 forward 로 하자
+                //bullet.transform.up = skillCenter.forward;
+                #endregion
+
+                #region 멀티플레이 모드
+                // skillCenter 를 (angle * i) 만큼 회전
+                skillCenter.localEulerAngles = new Vector3(0, angle * i, 0);
+                Vector3 pos = skillCenter.position + skillCenter.forward * 2;
+                Quaternion rot = Quaternion.LookRotation(Vector3.down, skillCenter.forward);
+                PhotonNetwork.Instantiate(bulletFactory.name, pos, rot);
+                #endregion
+            }
+        }
     }
 
     [PunRPC]
