@@ -8,13 +8,24 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
 {
     void Start()
     {
-        // Photon 환경설정을 기반으로 마스터 서버에 접속을 시도
-        PhotonNetwork.ConnectUsingSettings();
+        if(PhotonNetwork.IsConnected == false)
+        {
+            // Photon 환경설정을 기반으로 마스터 서버에 접속을 시도
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            print("접속 되어 있음!");
+        }
     }
 
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            // 로비 접속
+            JoinOrCreateRoom();
+        }
     }
 
     // 마스터 서버에 접속이 되면 호출되는 함수
@@ -22,8 +33,6 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
     {
         base.OnConnectedToMaster();
         print("마스터 서버에 접속");
-
-        // 로비 접속
         JoinLobby();
     }
 
@@ -41,12 +50,13 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
         base.OnJoinedLobby();
         print("로비 입장 완료");
 
-        JoinOrCreateRoom();
+        //JoinOrCreateRoom();
     }
 
     // Room 을 참여하자. 만약에 해당 Room 이 없으면 Room 만들겠다.
     public void JoinOrCreateRoom()
     {
+
         // 방 생성 옵션
         RoomOptions roomOption = new RoomOptions();
         // 방에 들어 올 수 있는 최대 인원 설정
@@ -55,6 +65,8 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
         roomOption.IsVisible = true;
         // 방에 참여를 할 수 있니?
         roomOption.IsOpen = true;
+
+        roomOption.CleanupCacheOnLeave = true;
 
         // Room 참여 or 생성
         PhotonNetwork.JoinOrCreateRoom("meta_unity_room012340", roomOption, TypedLobby.Default);
@@ -75,6 +87,16 @@ public class SimpleConnectionMgr : MonoBehaviourPunCallbacks
 
         // 멀티플레이 컨텐츠 즐길 수 있는 상태
         // GameScene으로 이동!
+        
         PhotonNetwork.LoadLevel("GameScene");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        base.OnRoomListUpdate(roomList);
+        foreach(var roomInfo in roomList)
+        {
+            print(roomInfo.Name + ", " + roomInfo.PlayerCount + ", " + roomInfo.RemovedFromList);
+        }
     }
 }
