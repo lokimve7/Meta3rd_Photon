@@ -56,6 +56,6 @@ public class ConnectionMgr : MonoBehaviourPunCallbacks
         // 닉네임 설정
         PhotonNetwork.NickName = inputNickName.text;
         // 로비씬으로 전환
-        print("로비씬으로 가자!");
+        PhotonNetwork.LoadLevel("LobbyScene");
     }
 }
