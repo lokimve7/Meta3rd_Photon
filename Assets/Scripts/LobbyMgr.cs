@@ -225,6 +225,9 @@ public class LobbyMgr : MonoBehaviourPunCallbacks
             roomItem.SetConent(roomName, info.PlayerCount, info.MaxPlayers);
             // 잠금 모드 표현
             roomItem.SetLockMode(isLock);
+
+            // roomItem 이 클릭되었을 때 호출되는 함수 등록
+            roomItem.onChangeRoomName = OnChangeRoomNameField;
         }
     }
 
@@ -235,5 +238,10 @@ public class LobbyMgr : MonoBehaviourPunCallbacks
         {
             Destroy(trContent.GetChild(i).gameObject);
         }
+    }
+
+    void OnChangeRoomNameField(string roomName)
+    {
+        inputRoomName.text = roomName;
     }
 }
