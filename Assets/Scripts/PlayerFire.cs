@@ -23,6 +23,8 @@ public class PlayerFire : MonoBehaviourPun
     // 스킬 중심점
     public Transform skillCenter;
 
+    public bool isMyTurn = false;
+
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
@@ -31,6 +33,8 @@ public class PlayerFire : MonoBehaviourPun
         HPSystem hpSystem = GetComponentInChildren<HPSystem>();
         // onDie 변수에 OnDie 함수 설정
         hpSystem.onDie = OnDie;
+
+        GameManager.instance.AddPlayer(photonView);
     }
 
     void Update()
@@ -44,6 +48,8 @@ public class PlayerFire : MonoBehaviourPun
 
         // HP 0 이 되었으면 총 쏘지 못하게
         if (isDie) return;
+
+        if (isMyTurn == false) return;
 
         // 마우스 왼쪽 버튼 누르면
         if (Input.GetMouseButtonDown(0))
@@ -79,6 +85,8 @@ public class PlayerFire : MonoBehaviourPun
                 {
                     hpSystem.UpdateHP(-1);
                 }
+
+                GameManager.instance.ChangeTurn();
             }   
         }
         
@@ -121,6 +129,8 @@ public class PlayerFire : MonoBehaviourPun
                 #endregion
             }
         }
+
+        //
     }
 
     [PunRPC]
@@ -147,6 +157,17 @@ public class PlayerFire : MonoBehaviourPun
     void CreateCube(Vector3 position)
     {
         Instantiate(cubeFactory, position, Quaternion.identity);
+    }
+
+    public void ChangeTurn(bool turn)
+    {
+        photonView.RPC(nameof(RpcChangeTurn), photonView.Owner, turn);
+    }
+
+    [PunRPC]
+    void RpcChangeTurn(bool turn)
+    {
+        isMyTurn = turn;
     }
 
     // 죽었니?
