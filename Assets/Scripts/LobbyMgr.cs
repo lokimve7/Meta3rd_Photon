@@ -46,7 +46,8 @@ public class LobbyMgr : MonoBehaviourPunCallbacks
 
         //// 삭제
         //dic.Remove(12);
-        //print(dic[12]); // 오류
+
+        //print(dic[12]); 
         #endregion
         #region HashTable 사용 예제  
 
@@ -88,7 +89,7 @@ public class LobbyMgr : MonoBehaviourPunCallbacks
     }
 
     public void CreateRoom()
-    {
+    {        
         // 방 옵션 설정
         RoomOptions option = new RoomOptions();
         // 최대 인원 설정
