@@ -18,9 +18,7 @@ public class PlayerWaiting : MonoBehaviourPun
         if(photonView.IsMine)
         {
             // WaitingMgr 에게 나를 알려주자.
-            GameObject go = GameObject.Find("WaitingManager");
-            WaitingMgr mgr = go.GetComponent<WaitingMgr>();
-            mgr.myPlayer = this;
+            WaitingMgr.instance.myPlayer = this;
         }
     }
 
@@ -29,15 +27,25 @@ public class PlayerWaiting : MonoBehaviourPun
         
     }
 
-    public void SetReady()
+    public void SetReady(bool isReady)
     {
-        photonView.RPC(nameof(RpcSetReady), RpcTarget.All);
+        photonView.RPC(nameof(RpcSetReady), RpcTarget.AllBuffered, isReady);
     }
 
     [PunRPC]
-    void RpcSetReady()
+    void RpcSetReady(bool isReady)
     {
-        // nickName 색을 파란색으로 설정
-        nickName.color = Color.blue;
+        if(isReady)
+        {
+            // nickName 색을 파란색으로 설정
+            nickName.color = Color.blue;
+        }
+        else
+        {
+            nickName.color = Color.white;
+        }
+
+        // 모두 Ready 했는지 체크
+        WaitingMgr.instance.CheckAllReady(isReady);
     }
 }
