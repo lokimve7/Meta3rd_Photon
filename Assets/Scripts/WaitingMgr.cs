@@ -50,6 +50,7 @@ public class WaitingMgr : MonoBehaviour
             // idx 값을 내가 몇번째 들어왔는지
             idx = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
+            ProjectManager.Get().orderInRoom = idx;
         }
 
         // 총길이 / 2
@@ -67,7 +68,6 @@ public class WaitingMgr : MonoBehaviour
             // 플레이어 생성
             Instantiate(playerWaitingFatory, pos, Quaternion.identity);
         }
-
     }
 
     void Update()

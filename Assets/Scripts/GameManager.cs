@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
         PhotonNetwork.SerializationRate = 60;
 
         // 내가 위치해야 하는 idx 를 알아오자. (현재 방의 들어와 있는 인원 수 )
-        int idx = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+        int idx = ProjectManager.Get().orderInRoom;
 
         // 플레이어를 생성 (현재 Room 에 접속 되어있는 친구들도 보이게)
         PhotonNetwork.Instantiate("Player", spawnPos[idx], Quaternion.identity);
