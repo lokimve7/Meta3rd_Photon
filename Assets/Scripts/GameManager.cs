@@ -12,7 +12,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Transform spawnCenter;
 
     // 모든 Player 의 PhotonView 가지고 있는 변수
-    public List<PhotonView> allPlayer = new List<PhotonView>();
+    public PhotonView[] allPlayer;
+
+    // GameScene 으로 넘어온 Player 의 갯수
+    int enterPlayerCnt;
 
     // 현재 총을 쏠 수 있는 player Idx
     int turnIdx = -1;
@@ -38,8 +41,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         // 플레이어를 생성 (현재 Room 에 접속 되어있는 친구들도 보이게)
         PhotonNetwork.Instantiate("Player", spawnPos[idx], Quaternion.identity);
 
-        // 더 이상 이방에 접속을 하지 못하게 하자.
+        // 모든 플레이어 담을 변수 공간 할당
+        allPlayer = new PhotonView[PhotonNetwork.CurrentRoom.MaxPlayers];
 
+        // 더 이상 이방에 접속을 하지 못하게 하자.
+        
     }
 
     void Update()
@@ -95,12 +101,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void AddPlayer(PhotonView pv)
+    public void AddPlayer(PhotonView pv, int order)
     {
-        allPlayer.Add(pv);
+        enterPlayerCnt++;
+
+        allPlayer[order] = pv;
 
         // 만약에 모든 Player 가 다 들어왔다면
-        if(allPlayer.Count == PhotonNetwork.CurrentRoom.MaxPlayers)
+        if(enterPlayerCnt == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             // 방장일때만
             if(PhotonNetwork.IsMasterClient)
@@ -115,13 +123,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void ChangeTurn()
     {
         photonView.RPC(nameof(RpcChangeTurn), RpcTarget.MasterClient);
+        
     }
 
     // 방장에서 호출된다.
     [PunRPC]
     void RpcChangeTurn()
-    {
-        turnIdx++;
+    {    
+        // turnIdx 를 최대인원 값보다 작게 만들자.
+        turnIdx = ++turnIdx % allPlayer.Length;
+
         print("현재 턴 : " + turnIdx);
 
         PlayerFire pf = allPlayer[turnIdx].GetComponent<PlayerFire>();
