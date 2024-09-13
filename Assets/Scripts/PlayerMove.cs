@@ -45,6 +45,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void Start()
     {
+        // GameManger 에게 photonView 를 넘겨주자
+        GameManager.instance.AddPlayer(photonView);
 
         if(photonView.IsMine)
         {

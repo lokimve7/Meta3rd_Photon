@@ -23,6 +23,8 @@ public class PlayerFire : MonoBehaviourPun
     // 스킬 중심점
     public Transform skillCenter;
 
+    // 나의 턴 이니?
+    public bool isMyTurn;
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
@@ -44,6 +46,9 @@ public class PlayerFire : MonoBehaviourPun
 
         // HP 0 이 되었으면 총 쏘지 못하게
         if (isDie) return;
+
+        // 내 턴이 아니라면 함수를 나가자
+        if (!isMyTurn) return;
 
         // 마우스 왼쪽 버튼 누르면
         if (Input.GetMouseButtonDown(0))
@@ -79,7 +84,12 @@ public class PlayerFire : MonoBehaviourPun
                 {
                     hpSystem.UpdateHP(-1);
                 }
-            }   
+            }
+
+            // 내 턴을 끝내자
+            isMyTurn = false;
+            // GameManger 에게 턴 넘겨달라고 요청
+            GameManager.instance.ChangeTurn();
         }
         
         // 1 번키 누르면
@@ -154,5 +164,17 @@ public class PlayerFire : MonoBehaviourPun
     public void OnDie()
     {
         isDie = true;
+    }
+
+    public void ChangeTurn(bool turn)
+    {
+        photonView.RPC(nameof(RpcChangeTurn), photonView.Owner, turn);
+    }
+
+    // isMyTurn 을 변경해주는 함수
+    [PunRPC]
+    void RpcChangeTurn(bool turn)
+    {
+        isMyTurn = turn;
     }
 }

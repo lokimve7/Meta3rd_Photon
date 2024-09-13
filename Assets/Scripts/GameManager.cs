@@ -3,11 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
+    public static GameManager instance;
+
     // Spawn 위치를 담아놓을 변수
     public Vector3[] spawnPos;
     public Transform spawnCenter;
+
+    // 모든 Player 의 PhotonView 가지고 있는 변수
+    public List<PhotonView> allPlayer = new List<PhotonView>();
+
+    // 현재 총을 쏠 수 있는 player Idx
+    int turnIdx = -1;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
 
     void Start()
     {
@@ -19,20 +33,43 @@ public class GameManager : MonoBehaviour
         PhotonNetwork.SerializationRate = 60;
 
         // 내가 위치해야 하는 idx 를 알아오자. (현재 방의 들어와 있는 인원 수 )
-        int idx = PhotonNetwork.CurrentRoom.PlayerCount - 1;
+        int idx = ProjectMgr.Get().orderInRoom;
 
         // 플레이어를 생성 (현재 Room 에 접속 되어있는 친구들도 보이게)
         PhotonNetwork.Instantiate("Player", spawnPos[idx], Quaternion.identity);
-               
+
+        // 더 이상 이방에 접속을 하지 못하게 하자.
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            // 방을 떠나자
+            PhotonNetwork.LeaveRoom();
+        }
     }
 
-    
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        // 방장에 의해서 Scene 전환되는 옵션 비활성
+        PhotonNetwork.AutomaticallySyncScene = false;
+        // 마우스 커서 Lock 모드 풀자
+        Cursor.lockState = CursorLockMode.None;
+
+        // 자동으로 Master Server 에 접속 시도
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        base.OnConnectedToMaster();
+        // LobbyScene 으로 전환
+        PhotonNetwork.LoadLevel("LobbyScene");
+    }
+
+
     void SetSpawnPos()
     {
         // maxPlayer 를 현재 방의 최대 인원으로 설정
@@ -56,5 +93,38 @@ public class GameManager : MonoBehaviour
             //// 생성된 큐브를 위에서 구한 위치에 놓자.
             //cube.transform.position = spawnPos[i];
         }
+    }
+
+    public void AddPlayer(PhotonView pv)
+    {
+        allPlayer.Add(pv);
+
+        // 만약에 모든 Player 가 다 들어왔다면
+        if(allPlayer.Count == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            // 방장일때만
+            if(PhotonNetwork.IsMasterClient)
+            {
+                // 턴 시작!
+                ChangeTurn();
+            }
+        }
+    }
+
+    // 방장아 턴 넘겨줘
+    public void ChangeTurn()
+    {
+        photonView.RPC(nameof(RpcChangeTurn), RpcTarget.MasterClient);
+    }
+
+    // 방장에서 호출된다.
+    [PunRPC]
+    void RpcChangeTurn()
+    {
+        turnIdx++;
+        print("현재 턴 : " + turnIdx);
+
+        PlayerFire pf = allPlayer[turnIdx].GetComponent<PlayerFire>();
+        pf.ChangeTurn(true);
     }
 }
